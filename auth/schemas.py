@@ -2,6 +2,15 @@ from enum import Enum
 import re
 from pydantic import BaseModel, Field, EmailStr, field_validator, model_validator
 
+class RefeshToken(BaseModel):
+    refresh_token: str
+
+
+class Token(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str
+
 
 class RoleEnum(Enum):
     client = "client"
@@ -46,3 +55,5 @@ class RegisterUser(UserBase):
         if self.password1 != self.password2:
             raise ValueError("Пароли не совпадают")
         return self
+
+
