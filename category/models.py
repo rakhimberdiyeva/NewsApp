@@ -9,9 +9,10 @@ class Category(Base, IntIdMixin, TimeActionMixin):
 
     name = Column(String(100), nullable=False)
     description = Column(String(512))
-    slug = Column(String)
-    seo_title = Column(String)
-    seo_description = Column(String)
+    slug = Column(String(255), nullable=False, unique=True,)
+    seo_title = Column(String(255))
+    seo_description = Column(String(320))
+
 
 
 

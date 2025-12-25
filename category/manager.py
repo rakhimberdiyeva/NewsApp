@@ -2,6 +2,7 @@ from sqlalchemy import insert, select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from category.models import Category
+from category.schemes import CreateUpdateCategory
 from core.manager import BaseManager
 
 
@@ -9,20 +10,15 @@ class AuthManager(BaseManager):
     def __init__(self, db: AsyncSession):
         super().__init__(db)
 
+
     async def create(
             self,
-            name,
-            description,
-            slug,
-            seo_title,
-            seo_description,
+            request: CreateUpdateCategory
     ):
+
+        data = request.model_dump()
         stmt = insert(Category).values(
-            name=name,
-            description=description,
-            slug=slug,
-            seo_title=seo_title,
-            seo_description=seo_description,
+            **data
         )
         await self.db.execute(stmt)
         await self.db.commit()
@@ -48,19 +44,13 @@ class AuthManager(BaseManager):
 
     async def update(
             self,
-            name,
-            description,
-            slug,
-            seo_title,
-            seo_description,
+            request: CreateUpdateCategory,
+            category_id: int
     ):
+        data = request.model_dump(exclude_unset=True)
         stmt = update(Category).values(
-            name=name,
-            description=description,
-            slug=slug,
-            seo_title=seo_title,
-            seo_description=seo_description,
-        )
+            **data
+        ).where(Category.id == category_id)
         await self.db.execute(stmt)
         await self.db.commit()
 
@@ -70,5 +60,5 @@ class AuthManager(BaseManager):
             category_id: int
     ):
         stmt = delete(Category).where(Category.id == category_id)
-        category = await self.db.execute(stmt)
-        return category.scalar_one_or_none()
+        await self.db.execute(stmt)
+        await self.db.commit()
