@@ -2,10 +2,9 @@ from core.session import async_session
 
 
 async def get_db():
-    async with async_session() as session:
+
         try:
-            yield session
-        except Exception as e:
-            await session.rollback()
+            async with async_session() as session:
+                yield session
         finally:
             await session.close()

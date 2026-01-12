@@ -23,6 +23,7 @@ if config.config_file_name is not None:
 from core.models import Base
 from auth.models import User
 from category.models import Category
+from article.models import Article
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,

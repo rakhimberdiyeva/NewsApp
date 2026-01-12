@@ -82,8 +82,7 @@ class AuthManager(BaseManager):
                 status_code=401,
                 detail="Invalid token"
             )
-        token = self.token_service.generate(user)
-        return token
+        return user
 
 
 
