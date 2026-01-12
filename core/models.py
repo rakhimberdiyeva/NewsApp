@@ -2,6 +2,7 @@ import datetime
 
 from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy import BigInteger, Column, DateTime
+
 class Base(DeclarativeBase):
     pass
 

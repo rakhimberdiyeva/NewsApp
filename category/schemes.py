@@ -1,21 +1,18 @@
-import re
-
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field
 
 
 class CategoryBase(BaseModel):
-    name: str = Field(max_length=100)
-    description: str | None  = Field(max_length=512)
-    slug: str= Field(max_length=255)
-    seo_title: str | None  = Field(max_length=255)
-    seo_description: str| None  = Field(max_length=320)
+    name: str = Field(min_length=3, max_length=320)
+    description: str = Field(max_length=2048)
 
-class CreateUpdateCategory(CategoryBase):
-    @field_validator("slug", mode="before")
-    @classmethod
-    def validate_slug(cls, slug:str):
-        slug = slug.strip().lower().replace(" ", "-")
-        if not re.fullmatch(r"[a-z0-9-]+", slug):
-            raise ValueError("Slug должен содержать только a-z, 0-9 и '-'")
-        return slug
 
+class CategoryCreate(CategoryBase):
+    pass
+
+
+class CategoryUpdate(CategoryBase):
+    pass
+
+
+class CategoryRead(CategoryBase):
+    id: int

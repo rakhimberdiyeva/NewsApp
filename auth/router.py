@@ -6,9 +6,7 @@ from auth.dependencies import get_current_user
 from auth.manager import AuthManager
 from auth.models import User
 from auth.schemas import RegisterUser, RefeshToken
-from auth.services import TokenServices
 from core.dependencies import get_db
-from core.session import async_session
 
 router = APIRouter(
     prefix="/auth",

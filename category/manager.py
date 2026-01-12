@@ -2,7 +2,6 @@ from sqlalchemy import insert, select, update, delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from category.models import Category
-from category.schemes import CreateUpdateCategory
 from core.manager import BaseManager
 
 
@@ -10,15 +9,14 @@ class AuthManager(BaseManager):
     def __init__(self, db: AsyncSession):
         super().__init__(db)
 
-
     async def create(
             self,
-            request: CreateUpdateCategory
+            name,
+            description,
     ):
-
-        data = request.model_dump()
         stmt = insert(Category).values(
-            **data
+            name=name,
+            description=description
         )
         await self.db.execute(stmt)
         await self.db.commit()
@@ -44,13 +42,13 @@ class AuthManager(BaseManager):
 
     async def update(
             self,
-            request: CreateUpdateCategory,
-            category_id: int
+            name,
+            description
     ):
-        data = request.model_dump(exclude_unset=True)
         stmt = update(Category).values(
-            **data
-        ).where(Category.id == category_id)
+            name=name,
+            description=description
+        )
         await self.db.execute(stmt)
         await self.db.commit()
 
@@ -60,5 +58,5 @@ class AuthManager(BaseManager):
             category_id: int
     ):
         stmt = delete(Category).where(Category.id == category_id)
-        await self.db.execute(stmt)
-        await self.db.commit()
+        category = await self.db.execute(stmt)
+        return category.scalar_one_or_none()
