@@ -4,6 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from article.filters import ArticleFilter
 from article.models import Article
 from article.schemas import ArticleCreate, ArticleUpdate, ArticleStatusEnum, ArticleStatusUpdate
 from category.dependencies import get_category_or_404
@@ -24,7 +25,6 @@ async def create_article(
     :raise HTTPException: не найдена категория
     :return: созданная статья
     """
-
     await get_category_or_404(request.category_id, session)
     article = Article(**request.model_dump(), author_id=author_id)
     session.add(article)
@@ -100,14 +100,16 @@ async def get_article(
     return article
 
 
-async def get_articles(session: AsyncSession):
+async def get_articles(session: AsyncSession,  filters: ArticleFilter) -> list[Article]:
     """
-        возвращает все статьи из бд
+    возвращает все статьи из бд
 
-        :param session: сессия бд
-        :return: моделька статьей
-        """
+    :param session: сессия бд
+    :return: моделька статьей
+    """
     stmt = select(Article)
+    stmt = filters.filter(stmt)
+    stmt = filters.sort(stmt)
     result = await session.execute(stmt)
     articles = result.scalars().all()
     return articles

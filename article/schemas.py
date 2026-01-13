@@ -25,6 +25,7 @@ class ArticleUpdate(ArticleBase):
 
 
 class ArticleStatusUpdate(BaseModel):
+    category_id: int = Field(ge=1)
     status: ArticleStatusEnum
 
 
