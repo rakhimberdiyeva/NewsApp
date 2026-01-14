@@ -83,8 +83,6 @@ async def create(
     return response
 
 
-
-
 @router.put(
     "/{article_id}",
     status_code=204,
