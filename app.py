@@ -2,6 +2,10 @@ from fastapi import FastAPI
 from auth.router import router as auth_router
 from category.router import router as category_router
 from article.router import router as article_router
+from comments.router import router as comment_router
+
+
+article_router.include_router(comment_router)
 
 app = FastAPI()
 app.include_router(auth_router)
