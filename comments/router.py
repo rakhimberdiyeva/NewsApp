@@ -25,7 +25,7 @@ router = APIRouter(
     summary="получение комментария по ид",
     responses={
         404: {
-            "description": "комментарий не найдена"
+            "description": "комментарий не найден"
         }
     }
 )

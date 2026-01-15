@@ -25,6 +25,7 @@ from auth.models import User
 from category.models import Category
 from article.models import Article
 from comments.models import Comment
+from complaint.models import Complaint
 target_metadata = Base.metadata
 
 # other values from the config, defined by the needs of env.py,
