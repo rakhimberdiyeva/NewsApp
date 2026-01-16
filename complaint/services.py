@@ -3,7 +3,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from article.dependencies import get_article_or_404
+from article.services import get_article
 from comments.dependencies import get_comment_or_404
+from comments.services import get_comment
 from complaint.models import Complaint
 from complaint.schemas import ComplaintCreate, ComplaintUpdateStatus, ComplaintStatusEnum
 
@@ -19,9 +21,23 @@ async def create_complaint(
     :param session: сессия бд
     :param request: Запрос с данными для создания жалобы
     :param user_id: ИД пользователя который создает жалобу
-    :raise HTTPException: не найдена жалоба
+    :raise HTTPException: не найден комментарий
+    :raise HTTPException: не найдена статья
+    :raise HTTPException: неправильный тип
     :return: созданная жалоба
     """
+
+    if request.target_type == "article":
+        await get_article_or_404(request.target_id, session)
+
+    elif request.target_type == "comment":
+        comment = await get_comment(session, request.target_id)
+        article = await get_article(session, comment.article_id)
+        await get_comment_or_404(request.target_id, article, session)
+
+    else:
+        raise HTTPException(status_code=406, detail="this target type is not acceptable")
+
 
     complaint = Complaint(**request.model_dump(), user_id=user_id)
     session.add(complaint)

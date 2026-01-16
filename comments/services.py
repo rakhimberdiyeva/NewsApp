@@ -23,6 +23,7 @@ async def create_comment(
     :raise HTTPException: не найдена статья
     :return: созданный комментарий
     """
+
     await get_article_or_404(article_id, session)
     comment = Comment(**request.model_dump(), user_id=user_id, article_id=article_id)
     session.add(comment)

@@ -14,7 +14,7 @@ async def get_comment_or_404(
         session: AsyncSession = Depends(get_db),
 ) -> Comment:
     """
-    функция зависимости комментариев
+    функция зависимости комментарие
 
     :param comment_id:ид комментария
     :param article: моделька статьи
