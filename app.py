@@ -6,6 +6,7 @@ from category.router import router as category_router
 from comments.router import router as comment_router
 from complaint.router import router as complaint_router
 from media.router import router as media_router
+from user.router import router as user_router
 
 
 article_router.include_router(comment_router)
@@ -17,4 +18,5 @@ app.include_router(article_router)
 app.include_router(bookmark_router)
 app.include_router(category_router)
 app.include_router(complaint_router)
+app.include_router(user_router)
 
